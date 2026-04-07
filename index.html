@@ -1,0 +1,998 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>CR7 — Cristiano Ronaldo</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Rajdhani:wght@300;400;600;700&family=Orbitron:wght@400;700;900&family=Playfair+Display:ital,wght@0,700;1,400&display=swap" rel="stylesheet">
+<style>
+:root{--gold:#c8a951;--gold2:#ffe082;--red:#d00000;--dark:#050505;--dark2:#0a0a0a;--dark3:#111;--grey:#777;--light:#e8e8e8;}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{background:var(--dark);color:var(--light);font-family:'Rajdhani',sans-serif;overflow-x:hidden;}
+
+/* CURSOR */
+.cursor{position:fixed;width:10px;height:10px;background:var(--gold);border-radius:50%;pointer-events:none;z-index:99999;transform:translate(-50%,-50%);transition:width .15s,height .15s;}
+.cursor-ring{position:fixed;width:32px;height:32px;border:1.5px solid rgba(200,169,81,.6);border-radius:50%;pointer-events:none;z-index:99998;transform:translate(-50%,-50%);transition:all .08s;}
+
+/* PROGRESS BAR */
+#progress{position:fixed;top:0;left:0;height:2px;background:linear-gradient(to right,var(--gold),#fff,var(--gold));z-index:9999;width:0%;transition:width .1s;}
+
+/* NAV */
+#nav{position:fixed;top:0;left:0;right:0;z-index:8000;display:flex;align-items:center;justify-content:space-between;padding:16px 40px;background:linear-gradient(to bottom,rgba(0,0,0,.97),transparent);backdrop-filter:blur(2px);}
+.nav-logo{font-family:'Bebas Neue',sans-serif;font-size:2rem;color:var(--gold);letter-spacing:5px;text-shadow:0 0 30px rgba(200,169,81,.5);text-decoration:none;}
+.nav-logo span{color:#fff;}
+.dots-btn{background:none;border:none;cursor:pointer;display:flex;flex-direction:column;gap:5px;padding:8px;transition:transform .2s;}
+.dots-btn:hover{transform:scale(1.1);}
+.dots-btn span{display:block;width:26px;height:2px;background:var(--gold);transition:all .3s;border-radius:2px;}
+.dots-btn.active span:nth-child(1){transform:translateY(7px) rotate(45deg);}
+.dots-btn.active span:nth-child(2){opacity:0;}
+.dots-btn.active span:nth-child(3){transform:translateY(-7px) rotate(-45deg);}
+.menu-panel{position:fixed;top:0;right:0;width:300px;height:100vh;background:rgba(5,5,5,.98);border-left:1px solid rgba(200,169,81,.2);z-index:9000;transform:translateX(100%);transition:transform .4s cubic-bezier(.77,0,.175,1);display:flex;flex-direction:column;justify-content:center;align-items:center;gap:0;backdrop-filter:blur(20px);}
+.menu-panel.open{transform:translateX(0);}
+.close-btn{position:absolute;top:20px;right:24px;background:none;border:none;color:var(--gold);font-size:1.8rem;cursor:pointer;transition:transform .2s;}
+.close-btn:hover{transform:rotate(90deg);}
+.menu-panel a{display:block;padding:20px 40px;font-family:'Bebas Neue',sans-serif;font-size:1.5rem;letter-spacing:4px;color:var(--grey);text-decoration:none;width:100%;text-align:center;border-bottom:1px solid rgba(200,169,81,.08);transition:all .3s;position:relative;}
+.menu-panel a::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--gold);transform:scaleY(0);transition:transform .3s;}
+.menu-panel a:hover{color:var(--gold);background:rgba(200,169,81,.04);}
+.menu-panel a:hover::before{transform:scaleY(1);}
+
+/* HERO */
+#hero{position:relative;height:100vh;min-height:700px;display:flex;align-items:center;justify-content:center;overflow:hidden;}
+.hero-bg{position:absolute;inset:0;background-image:url('assets/slides/slide1/Cr7.jpg');background-size:cover;background-position:center 20%;filter:brightness(.3) saturate(.7);z-index:0;animation:heroZoom 20s ease-in-out infinite alternate;}
+@keyframes heroZoom{from{transform:scale(1);}to{transform:scale(1.08);}}
+.hero-bg::after{content:'';position:absolute;inset:0;background:linear-gradient(to bottom,rgba(5,5,5,.3) 0%,transparent 40%,rgba(5,5,5,.7) 80%,var(--dark) 100%);}
+.hero-content{position:relative;z-index:2;text-align:center;padding:0 20px;}
+.hero-cr7{font-family:'Bebas Neue',sans-serif;font-size:min(28vw,300px);line-height:.82;color:transparent;-webkit-text-stroke:2px rgba(200,169,81,.9);letter-spacing:-6px;animation:cr7Glow 3s ease-in-out infinite;user-select:none;}
+@keyframes cr7Glow{0%,100%{-webkit-text-stroke:2px rgba(200,169,81,.85);text-shadow:0 0 60px rgba(200,169,81,.1);}50%{-webkit-text-stroke:2px #ffe082;text-shadow:0 0 120px rgba(200,169,81,.5),0 0 250px rgba(200,169,81,.2);}}
+.hero-sub{font-family:'Orbitron',sans-serif;font-size:clamp(.8rem,1.8vw,1.1rem);letter-spacing:8px;color:var(--gold);margin-top:14px;text-transform:uppercase;animation:fadeUp .8s .3s both;}
+.hero-siuu{position:absolute;bottom:40px;left:50%;transform:translateX(-50%);display:flex;gap:12px;flex-wrap:wrap;justify-content:center;animation:fadeUp .8s .6s both;}
+.siuu-tag{background:rgba(200,169,81,.1);border:1px solid rgba(200,169,81,.35);padding:9px 22px;font-size:.78rem;letter-spacing:3px;font-family:'Orbitron',sans-serif;color:var(--gold);border-radius:2px;white-space:nowrap;transition:all .3s;}
+.siuu-tag:hover{background:rgba(200,169,81,.2);border-color:var(--gold);}
+.siuu-fly{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-family:'Bebas Neue',sans-serif;font-size:clamp(6rem,18vw,200px);color:rgba(200,169,81,.05);letter-spacing:20px;pointer-events:none;animation:siuuPulse 5s ease-in-out infinite;z-index:1;}
+@keyframes siuuPulse{0%,100%{opacity:.05;transform:translate(-50%,-50%) scale(1);}50%{opacity:.12;transform:translate(-50%,-50%) scale(1.04);}}
+.particles{position:absolute;inset:0;z-index:1;overflow:hidden;pointer-events:none;}
+.particle{position:absolute;width:2px;height:2px;background:var(--gold);border-radius:50%;animation:particleFloat linear infinite;opacity:0;}
+@keyframes particleFloat{0%{transform:translateY(100vh) translateX(0);opacity:0;}10%{opacity:.8;}90%{opacity:.3;}100%{transform:translateY(-50px) translateX(var(--dx));opacity:0;}}
+@keyframes fadeUp{from{opacity:0;transform:translateY(30px);}to{opacity:1;transform:translateY(0);}}
+
+/* SECTIONS */
+.section-label{font-family:'Orbitron',sans-serif;font-size:.65rem;letter-spacing:6px;color:var(--gold);margin-bottom:12px;text-transform:uppercase;}
+.section-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(2.5rem,6vw,4.5rem);line-height:1;margin-bottom:30px;}
+.gold{color:var(--gold);}
+.divider{height:1px;background:linear-gradient(to right,transparent,rgba(200,169,81,.4),transparent);}
+
+/* REVEAL ANIMATION */
+.reveal{opacity:0;transform:translateY(50px);transition:opacity .9s ease,transform .9s ease;}
+.reveal.visible{opacity:1;transform:translateY(0);}
+
+/* ABOUT */
+#about{background:var(--dark2);padding:110px 40px;}
+.about-inner{max-width:1200px;margin:0 auto;display:grid;grid-template-columns:420px 1fr;gap:70px;align-items:start;}
+.about-photo-wrap{position:relative;}
+.about-photo{width:100%;height:560px;object-fit:cover;object-position:top center;border:1px solid rgba(200,169,81,.25);display:block;cursor:pointer;transition:filter .3s;}
+.about-photo:hover{filter:brightness(1.08);}
+.about-photo-frame{position:absolute;top:-12px;left:-12px;right:12px;bottom:12px;border:1px solid rgba(200,169,81,.15);pointer-events:none;}
+.about-photo-frame2{position:absolute;top:-20px;left:-20px;right:20px;bottom:20px;border:1px solid rgba(200,169,81,.07);pointer-events:none;}
+.profile-badge{position:absolute;bottom:-24px;right:-24px;background:var(--dark);border:1px solid var(--gold);padding:16px 22px;text-align:center;box-shadow:0 0 30px rgba(200,169,81,.15);}
+.profile-badge .num{font-family:'Bebas Neue',sans-serif;font-size:3.2rem;color:var(--gold);line-height:1;}
+.profile-badge .label{font-size:.65rem;letter-spacing:3px;color:var(--grey);text-transform:uppercase;}
+.about-info .bio{font-size:1.05rem;line-height:1.85;color:#bbb;margin-bottom:18px;}
+.attr-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:22px;}
+.attr-item{background:rgba(200,169,81,.04);border:1px solid rgba(200,169,81,.12);padding:14px 18px;transition:all .3s;cursor:default;}
+.attr-item:hover{border-color:rgba(200,169,81,.45);background:rgba(200,169,81,.08);transform:translateY(-2px);}
+.attr-val{font-family:'Bebas Neue',sans-serif;font-size:2rem;color:var(--gold);line-height:1;}
+.attr-lbl{font-size:.72rem;letter-spacing:2px;color:var(--grey);text-transform:uppercase;margin-top:3px;}
+.honour-item{display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid rgba(255,255,255,.05);}
+.honour-icon{width:32px;height:32px;background:rgba(200,169,81,.08);border:1px solid rgba(200,169,81,.2);display:flex;align-items:center;justify-content:center;font-size:1rem;flex-shrink:0;}
+.honour-text{font-size:.95rem;color:#ccc;}
+
+/* VIDEOS */
+.vid-section{background:var(--dark);padding:70px 40px;text-align:center;}
+.vid-label{font-family:'Orbitron',sans-serif;font-size:.62rem;letter-spacing:5px;color:var(--gold);margin-bottom:10px;text-transform:uppercase;}
+.vid-title{font-family:'Bebas Neue',sans-serif;font-size:2rem;color:#fff;margin-bottom:16px;letter-spacing:2px;}
+.main-video{width:100%;max-width:1000px;display:block;margin:0 auto;border:1px solid rgba(200,169,81,.25);background:#000;outline:none;}
+.main-video:focus{border-color:rgba(200,169,81,.6);}
+
+/* TEXT BLOCK */
+.text-block{max-width:900px;margin:0 auto;padding:80px 40px;}
+.text-block h2{font-family:'Bebas Neue',sans-serif;font-size:clamp(2rem,5vw,3.8rem);margin-bottom:26px;}
+.text-block p{font-size:1.06rem;line-height:1.9;color:#aaa;margin-bottom:20px;}
+.text-block p strong{color:var(--gold);}
+.stat-row{display:flex;flex-wrap:wrap;gap:18px;margin:32px 0;}
+.stat-box{flex:1;min-width:130px;background:rgba(200,169,81,.04);border:1px solid rgba(200,169,81,.15);padding:20px;text-align:center;transition:all .3s;}
+.stat-box:hover{background:rgba(200,169,81,.08);border-color:rgba(200,169,81,.4);transform:translateY(-3px);}
+.stat-box .n{font-family:'Bebas Neue',sans-serif;font-size:2.8rem;color:var(--gold);line-height:1;}
+.stat-box .l{font-size:.7rem;letter-spacing:2px;color:var(--grey);text-transform:uppercase;margin-top:5px;}
+
+/* AUTO GALLERIES */
+.gallery-section{padding:70px 0;overflow:hidden;background:var(--dark2);}
+.gallery-section-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(1.8rem,4vw,3rem);padding:0 40px 32px;color:var(--gold);letter-spacing:3px;}
+.auto-gallery{overflow:hidden;position:relative;}
+.auto-gallery::before,.auto-gallery::after{content:'';position:absolute;top:0;bottom:0;width:120px;z-index:2;pointer-events:none;}
+.auto-gallery::before{left:0;background:linear-gradient(to right,var(--dark2),transparent);}
+.auto-gallery::after{right:0;background:linear-gradient(to left,var(--dark2),transparent);}
+.gallery-track{display:flex;gap:14px;width:max-content;}
+.gallery-track.anim{animation:slideTrack 50s linear infinite;}
+.gallery-track.anim-rev{animation:slideTrackRev 55s linear infinite;}
+.gallery-track:hover{animation-play-state:paused;}
+
+/* =====================================================
+   FIXED: Gallery slides — no cropping, full image shown
+   object-fit:contain + black bg + flex centering
+   ===================================================== */
+/* NEW - full image, no black bars, no cropping */
+.gslide{
+  flex-shrink:0;
+  height:340px;
+  width:auto;
+  overflow:hidden;
+  border:1px solid rgba(200,169,81,.15);
+  transition:border-color .3s,transform .3s,box-shadow .3s;
+  cursor:pointer;
+  background:transparent;
+}
+.gslide:hover{border-color:rgba(200,169,81,.6);transform:scale(1.04);z-index:5;box-shadow:0 20px 60px rgba(0,0,0,.7);}
+.gslide img{
+  height:100%;
+  width:auto;
+  display:block;
+  transition:transform .5s;
+}
+.gslide:hover img{transform:scale(1.06);}
+
+@keyframes slideTrack{0%{transform:translateX(0);}100%{transform:translateX(-50%);}}
+@keyframes slideTrackRev{0%{transform:translateX(-50%);}100%{transform:translateX(0);}}
+
+/* GOALS */
+#goals{background:var(--dark);padding:110px 40px;}
+.goals-header{text-align:center;margin-bottom:70px;}
+.goals-header h2{font-family:'Bebas Neue',sans-serif;font-size:clamp(3rem,8vw,7rem);color:transparent;background:linear-gradient(135deg,var(--gold) 0%,#fff 50%,var(--gold) 100%);-webkit-background-clip:text;background-clip:text;letter-spacing:3px;}
+.era-title{font-family:'Bebas Neue',sans-serif;font-size:2.2rem;color:var(--gold);letter-spacing:3px;border-left:3px solid var(--gold);padding-left:18px;margin-bottom:12px;}
+.era-sub{font-size:.85rem;color:var(--grey);margin-bottom:28px;padding-left:22px;letter-spacing:.5px;}
+.goals-era{margin-bottom:70px;}
+.goals-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:16px;}
+.goal-card{background:rgba(255,255,255,.02);border:1px solid rgba(200,169,81,.1);padding:20px;transition:all .35s;position:relative;overflow:hidden;cursor:default;}
+.goal-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(to right,var(--gold),transparent);transform:scaleX(0);transform-origin:left;transition:transform .4s;}
+.goal-card:hover{background:rgba(200,169,81,.06);border-color:rgba(200,169,81,.45);transform:translateY(-6px);box-shadow:0 24px 50px rgba(0,0,0,.6);}
+.goal-card:hover::before{transform:scaleX(1);}
+.goal-card.milestone{border-color:rgba(200,169,81,.4);background:rgba(200,169,81,.06);}
+.goal-num{font-family:'Bebas Neue',sans-serif;font-size:2.6rem;color:var(--gold);line-height:1;}
+.goal-num.big{font-size:3.5rem;}
+.goal-meta{display:flex;gap:10px;margin:6px 0;flex-wrap:wrap;}
+.goal-date{font-size:.7rem;color:var(--grey);letter-spacing:1px;}
+.goal-club{font-size:.7rem;color:rgba(200,169,81,.75);font-weight:700;letter-spacing:1px;}
+.goal-vs{font-size:.95rem;color:#ccc;margin:5px 0;}
+.goal-vs strong{color:#fff;}
+.goal-info{display:flex;flex-wrap:wrap;gap:5px;margin-top:10px;}
+.tag{font-size:.62rem;padding:3px 9px;border-radius:2px;letter-spacing:1px;text-transform:uppercase;background:rgba(255,255,255,.05);color:var(--grey);border:1px solid rgba(255,255,255,.08);}
+.tag-type{background:rgba(200,169,81,.1);color:var(--gold);border-color:rgba(200,169,81,.2);}
+.tag-assist{background:rgba(100,200,100,.05);color:#7dcf7d;border-color:rgba(100,200,100,.15);}
+.tag-milestone{background:rgba(200,169,81,.15);color:#ffe082;border-color:rgba(200,169,81,.35);font-weight:700;}
+
+/* USE IMAGE GRID */
+#use-imgs{padding:90px 40px;background:var(--dark2);}
+.use-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:5px;max-width:1500px;margin:40px auto 0;}
+.use-img{overflow:hidden;aspect-ratio:1;cursor:pointer;position:relative;background:#000;}
+.use-img::after{content:'🔍';position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:2rem;background:rgba(0,0,0,.0);opacity:0;transition:all .3s;}
+.use-img:hover::after{background:rgba(0,0,0,.3);opacity:1;}
+.use-img img{width:100%;height:100%;object-fit:contain;display:block;transition:transform .5s,filter .4s;filter:saturate(.85);}
+.use-img:hover img{transform:scale(1.05);filter:saturate(1.3);}
+
+/* LINKS */
+#links{padding:110px 40px;background:var(--dark);}
+.links-inner{max-width:1000px;margin:0 auto;}
+.links-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:16px;margin-top:40px;}
+.link-card{display:flex;flex-direction:column;align-items:center;padding:28px 16px;background:rgba(255,255,255,.02);border:1px solid rgba(200,169,81,.1);text-decoration:none;color:var(--light);transition:all .3s;text-align:center;}
+.link-card:hover{background:rgba(200,169,81,.08);border-color:var(--gold);transform:translateY(-8px);box-shadow:0 20px 50px rgba(0,0,0,.5);}
+.link-icon{font-size:2.2rem;margin-bottom:12px;}
+.link-name{font-family:'Bebas Neue',sans-serif;font-size:1.1rem;letter-spacing:3px;color:var(--gold);margin-bottom:5px;}
+.link-sub{font-size:.75rem;color:var(--grey);}
+
+/* GEORGINA */
+#georgina{padding:110px 0;background:var(--dark2);}
+.geo-header{text-align:center;padding:0 40px 70px;}
+.geo-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(3rem,9vw,7rem);background:linear-gradient(135deg,#fff 0%,var(--gold) 35%,#fff 60%,var(--gold) 100%);-webkit-background-clip:text;background-clip:text;color:transparent;letter-spacing:4px;margin-bottom:18px;line-height:.9;}
+.geo-sub{font-size:.85rem;color:var(--grey);letter-spacing:4px;font-family:'Orbitron',sans-serif;}
+.kiss-placeholder{width:90px;height:90px;border-radius:50%;background:rgba(200,169,81,.08);border:1px solid rgba(200,169,81,.2);margin:24px auto;display:flex;align-items:center;justify-content:center;font-size:2.5rem;animation:heartbeat 1.5s ease-in-out infinite;}
+@keyframes heartbeat{0%,100%{transform:scale(1);}50%{transform:scale(1.1);}}
+.geo-text-section{max-width:900px;margin:0 auto;padding:70px 40px;}
+.geo-text-section p{font-size:1.06rem;line-height:1.9;color:#aaa;margin-bottom:22px;}
+.geo-text-section p strong{color:var(--gold);}
+.quote-block{border-left:2px solid var(--gold);padding:22px 32px;margin:32px 0;background:rgba(200,169,81,.04);}
+.quote-block p{font-family:'Playfair Display',serif;font-style:italic;font-size:1.18rem;color:#ccc;line-height:1.75;}
+.quote-block cite{display:block;margin-top:14px;font-size:.78rem;letter-spacing:2px;color:var(--gold);font-style:normal;text-transform:uppercase;}
+.geo-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:5px;padding:0;}
+.geo-grid-item{overflow:hidden;aspect-ratio:4/5;cursor:pointer;position:relative;background:#000;}
+.geo-grid-item::after{content:'❤️';position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:2.5rem;background:rgba(0,0,0,0);opacity:0;transition:all .3s;}
+.geo-grid-item:hover::after{background:rgba(0,0,0,.3);opacity:1;}
+.geo-grid-item img{width:100%;height:100%;object-fit:contain;display:block;transition:transform .5s;}
+.geo-grid-item:hover img{transform:scale(1.05);}
+
+/* CONTACT */
+#contact{padding:110px 40px;background:var(--dark);}
+.contact-inner{max-width:750px;margin:0 auto;text-align:center;}
+.contact-cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:16px;margin-top:44px;}
+.contact-card{padding:24px;background:rgba(255,255,255,.02);border:1px solid rgba(200,169,81,.12);text-decoration:none;color:var(--light);transition:all .3s;display:flex;flex-direction:column;align-items:center;gap:10px;}
+.contact-card:hover{background:rgba(200,169,81,.07);border-color:var(--gold);transform:translateY(-6px);}
+.contact-card .c-icon{font-size:2rem;}
+.contact-card .c-name{font-family:'Orbitron',sans-serif;font-size:.65rem;letter-spacing:2px;color:var(--gold);}
+.contact-card .c-val{font-size:.78rem;color:#bbb;word-break:break-all;text-align:center;}
+
+/* FOOTER */
+#footer{text-align:center;padding:50px;border-top:1px solid rgba(200,169,81,.08);}
+#footer p{font-family:'Orbitron',sans-serif;font-size:.6rem;letter-spacing:3px;color:rgba(200,169,81,.4);}
+
+/* ===== LIGHTBOX ===== */
+.lightbox{position:fixed;inset:0;background:rgba(0,0,0,.97);z-index:100000;display:none;align-items:center;justify-content:center;flex-direction:column;}
+.lightbox.active{display:flex;}
+.lightbox-img-wrap{position:relative;max-width:92vw;max-height:88vh;display:flex;align-items:center;justify-content:center;}
+.lightbox img{max-width:92vw;max-height:88vh;object-fit:contain;border:1px solid rgba(200,169,81,.2);display:block;animation:lbIn .2s ease;}
+@keyframes lbIn{from{opacity:0;transform:scale(.93);}to{opacity:1;transform:scale(1);}}
+.lightbox-close{position:absolute;top:18px;right:24px;font-size:2.2rem;color:var(--gold);cursor:pointer;background:none;border:none;transition:transform .2s;line-height:1;}
+.lightbox-close:hover{transform:rotate(90deg) scale(1.2);}
+.lightbox-prev,.lightbox-next{position:absolute;top:50%;transform:translateY(-50%);background:rgba(200,169,81,.12);border:1px solid rgba(200,169,81,.25);color:var(--gold);font-size:2rem;width:52px;height:52px;border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s;z-index:2;}
+.lightbox-prev{left:20px;}
+.lightbox-next{right:20px;}
+.lightbox-prev:hover,.lightbox-next:hover{background:rgba(200,169,81,.3);border-color:var(--gold);}
+.lightbox-counter{font-family:'Orbitron',sans-serif;font-size:.65rem;letter-spacing:3px;color:var(--gold);margin-top:14px;}
+
+@media(max-width:768px){
+  .about-inner{grid-template-columns:1fr;}
+  #nav{padding:14px 20px;}
+  .gslide{width:280px;height:200px;}
+  .goals-grid{grid-template-columns:1fr 1fr;}
+  .geo-grid,.use-grid{grid-template-columns:1fr 1fr;}
+  .attr-grid{grid-template-columns:1fr 1fr;}
+  .text-block{padding:60px 20px;}
+  section,#about,#goals,#links,#contact,#use-imgs,#georgina{padding-left:20px;padding-right:20px;}
+}
+@media(max-width:480px){
+  .gslide{width:220px;height:160px;}
+  .geo-grid,.use-grid{grid-template-columns:1fr;}
+}
+</style>
+</head>
+<body>
+
+<div class="cursor" id="cur"></div>
+<div class="cursor-ring" id="ring"></div>
+<div id="progress"></div>
+
+<!-- NAV -->
+<nav id="nav">
+  <a class="nav-logo" href="#hero">CR<span>7</span></a>
+  <button class="dots-btn" id="dotsBtn" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<!-- MENU PANEL -->
+<div class="menu-panel" id="menuPanel">
+  <button class="close-btn" id="closeMenu">✕</button>
+  <a href="#hero" onclick="closePanel()">🏠 Home</a>
+  <a href="#about" onclick="closePanel()">📸 Photo</a>
+  <a href="#vid1" onclick="closePanel()">🎬 Video</a>
+  <a href="#goals" onclick="closePanel()">📊 Stats</a>
+  <a href="#links" onclick="closePanel()">🔗 Links</a>
+  <a href="#georgina" onclick="closePanel()">❤️ Ronaldo & Georgina</a>
+  <a href="#contact" onclick="closePanel()">📩 Contact Us</a>
+</div>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-bg"></div>
+  <div class="particles" id="particles"></div>
+  <div class="siuu-fly">SIUUU</div>
+  <div class="hero-content">
+    <div class="hero-cr7">CR7</div>
+    <div class="hero-sub">Cristiano Ronaldo · The G.O.A.T · Madeira to the World</div>
+    <div class="hero-siuu">
+      <div class="siuu-tag">⚽ 900+ Career Goals</div>
+      <div class="siuu-tag">🏆 5 Ballon d'Or</div>
+      <div class="siuu-tag">👑 658M Instagram Followers</div>
+      <div class="siuu-tag">💰 $1.4B Net Worth</div>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about" class="reveal">
+  <div class="about-inner">
+    <div class="about-photo-wrap">
+      <div class="about-photo-frame2"></div>
+      <div class="about-photo-frame"></div>
+      <img class="about-photo" src="assets/images/cristiano.jpg" alt="Cristiano Ronaldo" onclick="openSingle(this.src)">
+      <div class="profile-badge"><div class="num">CR7</div><div class="label">GOAT</div></div>
+    </div>
+    <div class="about-info">
+      <div class="section-label">The Legend</div>
+      <h2 class="section-title">Cristiano<br><span class="gold">Ronaldo</span></h2>
+      <p class="bio">Born February 5, 1985 in Funchal, Madeira — Cristiano Ronaldo dos Santos Aveiro rose from a working-class family on a small Portuguese island to become the most recognizable athlete on the planet. His father worked as a municipal gardener. At 12, he left Madeira to join Sporting CP's youth academy in Lisbon — alone, homesick, determined.</p>
+      <p class="bio">Signed by Manchester United at 18 for £12.24m. Sold to Real Madrid at 24 for a world-record £80m. Today his brand alone is worth hundreds of millions. <strong>5 Ballon d'Or. 5 Champions Leagues. 7 League titles. 130+ international goals. 900+ career goals.</strong> No player has dominated across four decades the way he has.</p>
+      <div class="attr-grid">
+        <div class="attr-item"><div class="attr-val">6′2″</div><div class="attr-lbl">Height</div></div>
+        <div class="attr-item"><div class="attr-val">~7%</div><div class="attr-lbl">Body Fat</div></div>
+        <div class="attr-item"><div class="attr-val">78cm</div><div class="attr-lbl">Vertical Jump</div></div>
+        <div class="attr-item"><div class="attr-val">33km/h</div><div class="attr-lbl">Top Speed</div></div>
+        <div class="attr-item"><div class="attr-val">5</div><div class="attr-lbl">Ballon d'Or</div></div>
+        <div class="attr-item"><div class="attr-val">5</div><div class="attr-lbl">UCL Titles</div></div>
+        <div class="attr-item"><div class="attr-val">900+</div><div class="attr-lbl">Career Goals</div></div>
+        <div class="attr-item"><div class="attr-val">$1.4B</div><div class="attr-lbl">Net Worth</div></div>
+      </div>
+      <div style="margin-top:30px;">
+        <div class="honour-item"><div class="honour-icon">🏆</div><div class="honour-text">5× UEFA Champions League (2008, 2014, 2016, 2017, 2018)</div></div>
+        <div class="honour-item"><div class="honour-icon">🌟</div><div class="honour-text">5× Ballon d'Or (2008, 2013, 2014, 2016, 2017)</div></div>
+        <div class="honour-item"><div class="honour-icon">🏅</div><div class="honour-text">UEFA Euro 2016 & Nations League 2019 & 2025 with Portugal</div></div>
+        <div class="honour-item"><div class="honour-icon">⚽</div><div class="honour-text">First player to score at 5 FIFA World Cups · 130+ international goals</div></div>
+        <div class="honour-item"><div class="honour-icon">👑</div><div class="honour-text">#1 Most followed human on Instagram — 658 million followers</div></div>
+        <div class="honour-item"><div class="honour-icon">💰</div><div class="honour-text">Football's first confirmed billionaire — $1.4 Billion net worth (2026)</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- VIDEO 1 -->
+<div class="vid-section reveal" id="vid1">
+  <div class="vid-label">Manchester United · 2008 · The Celebration</div>
+  <div class="vid-title">Spikey Hair Scream — The Iconic Moment</div>
+  <video controls preload="metadata" class="main-video">
+    <source src="assets/videos/Cristiano_Ronaldo_Spikey_Hair_Scream_Celebration_Rare_Free_Clip___Manchester_United_2008_720P_HD_.mp4" type="video/mp4">
+  </video>
+</div>
+
+<!-- TEXT 1 -->
+<div class="text-block reveal">
+  <p class="section-label">The Beginning</p>
+  <h2>Manchester United<br><span class="gold">Where Legends Are Born</span></h2>
+  <p>In 2003, a raw 18-year-old winger from Madeira arrived at Old Trafford and changed football forever. Sir Alex Ferguson saw something extraordinary — pace, skill, and a hunger that nobody could teach. Within five years, Ronaldo had won three Premier League titles, one Champions League, and his first Ballon d'Or.</p>
+  <p>The <strong>2007/08 season</strong> was a masterpiece — 42 goals across all competitions. The <strong>Luzhniki header</strong> in Moscow sealed the Champions League against Chelsea. The boy from Madeira was 23 and just getting started.</p>
+  <div class="stat-row">
+    <div class="stat-box"><div class="n">97</div><div class="l">Goals for Man United</div></div>
+    <div class="stat-box"><div class="n">3</div><div class="l">Premier League Titles</div></div>
+    <div class="stat-box"><div class="n">1</div><div class="l">Champions League</div></div>
+    <div class="stat-box"><div class="n">1</div><div class="l">Ballon d'Or</div></div>
+  </div>
+</div>
+
+<!-- VIDEO 2 -->
+<div class="vid-section reveal">
+  <div class="vid-label">Free Kick Art · 2009</div>
+  <div class="vid-title">The Knuckleball — Goalkeepers Had No Chance</div>
+  <video controls preload="metadata" class="main-video">
+    <source src="assets/videos/Ronaldo_Freekick_2009_720P_HD_.mp4" type="video/mp4">
+  </video>
+</div>
+
+<!-- TEXT 2 -->
+<div class="text-block reveal">
+  <p class="section-label">Real Madrid Era</p>
+  <h2>La Liga's Greatest<br><span class="gold">Scorer of All Time</span></h2>
+  <p>In 2009, Real Madrid paid a world-record £80 million. They got back 450 goals across nine seasons. He broke Raúl's all-time scoring record. Won La Décima — the long-awaited 10th Champions League. Delivered four UCL titles in five years. The BBC front line (Bale, Benzema, Cristiano) was the most feared attack in European history.</p>
+  <p>The <strong>2011/12 season</strong> produced an unprecedented 50 La Liga goals — a record that still stands. And in 2017, his <strong>bicycle kick against Juventus</strong> in the UCL earned a standing ovation from the Juventus fans inside their own stadium.</p>
+  <div class="stat-row">
+    <div class="stat-box"><div class="n">450</div><div class="l">Goals for Real Madrid</div></div>
+    <div class="stat-box"><div class="n">4</div><div class="l">UCL Titles</div></div>
+    <div class="stat-box"><div class="n">4</div><div class="l">Ballon d'Or</div></div>
+    <div class="stat-box"><div class="n">50</div><div class="l">La Liga Goals 11/12</div></div>
+  </div>
+</div>
+
+<!-- SLIDE 1 -->
+<section class="gallery-section reveal">
+  <div class="gallery-section-title">📸 Gallery I — The King of Madrid</div>
+  <div class="auto-gallery">
+    <div class="gallery-track anim" id="gtrack1">
+      <div class="gslide" data-gallery="g1" data-idx="0"><img src="assets/slides/slide1/CR7_Madrid_120.jpg" alt="CR7" loading="lazy"></div>
+      <div class="gslide" data-gallery="g1" data-idx="1"><img src="assets/slides/slide1/CR7__1_.jpg" alt="CR7" loading="lazy"></div>
+      <div class="gslide" data-gallery="g1" data-idx="2"><img src="assets/slides/slide1/CR7__2_.jpg" alt="CR7" loading="lazy"></div>
+      <div class="gslide" data-gallery="g1" data-idx="3"><img src="assets/slides/slide1/CR7_x_Sergio_Ramos__.jpg" alt="CR7" loading="lazy"></div>
+      <div class="gslide" data-gallery="g1" data-idx="4"><img src="assets/slides/slide1/CRISTIANO_RONALDO__2_.jpg" alt="CR7" loading="lazy"></div>
+      <div class="gslide" data-gallery="g1" data-idx="5"><img src="assets/slides/slide1/Christiano_Ronaldo.jpg" alt="CR7" loading="lazy"></div>
+      <div class="gslide" data-gallery="g1" data-idx="6"><img src="assets/slides/slide1/Cr7.jpg" alt="CR7" loading="lazy"></div>
+      <div class="gslide" data-gallery="g1" data-idx="7"><img src="assets/slides/slide1/Cr7__3_.jpg" alt="CR7" loading="lazy"></div>
+      <div class="gslide" data-gallery="g1" data-idx="8"><img src="assets/slides/slide1/Cristiano_Ronaldo.jpg" alt="CR7" loading="lazy"></div>
+      <div class="gslide" data-gallery="g1" data-idx="9"><img src="assets/slides/slide1/Cristiano_Ronaldo_Al_Nassr_Journey_2025__.jpg" alt="CR7" loading="lazy"></div>
+      <!-- Duplicates for infinite loop -->
+      <div class="gslide" data-gallery="g1" data-idx="0"><img src="assets/slides/slide1/CR7_Madrid_120.jpg" alt="CR7" loading="lazy"></div>
+      <div class="gslide" data-gallery="g1" data-idx="1"><img src="assets/slides/slide1/CR7__1_.jpg" alt="CR7" loading="lazy"></div>
+      <div class="gslide" data-gallery="g1" data-idx="2"><img src="assets/slides/slide1/CR7__2_.jpg" alt="CR7" loading="lazy"></div>
+      <div class="gslide" data-gallery="g1" data-idx="3"><img src="assets/slides/slide1/CR7_x_Sergio_Ramos__.jpg" alt="CR7" loading="lazy"></div>
+      <div class="gslide" data-gallery="g1" data-idx="4"><img src="assets/slides/slide1/CRISTIANO_RONALDO__2_.jpg" alt="CR7" loading="lazy"></div>
+      <div class="gslide" data-gallery="g1" data-idx="5"><img src="assets/slides/slide1/Christiano_Ronaldo.jpg" alt="CR7" loading="lazy"></div>
+      <div class="gslide" data-gallery="g1" data-idx="6"><img src="assets/slides/slide1/Cr7.jpg" alt="CR7" loading="lazy"></div>
+      <div class="gslide" data-gallery="g1" data-idx="7"><img src="assets/slides/slide1/Cr7__3_.jpg" alt="CR7" loading="lazy"></div>
+      <div class="gslide" data-gallery="g1" data-idx="8"><img src="assets/slides/slide1/Cristiano_Ronaldo.jpg" alt="CR7" loading="lazy"></div>
+      <div class="gslide" data-gallery="g1" data-idx="9"><img src="assets/slides/slide1/Cristiano_Ronaldo_Al_Nassr_Journey_2025__.jpg" alt="CR7" loading="lazy"></div>
+    </div>
+  </div>
+</section>
+
+<!-- TEXT 3 -->
+<div class="text-block reveal">
+  <p class="section-label">The Machine</p>
+  <h2>Physical <span class="gold">Perfection</span></h2>
+  <p>Body fat at <strong>7%</strong>. Vertical jump of <strong>78cm</strong> — exceeding most NBA players. Top speed above 33 km/h. Five 90-minute recovery sleep cycles. Cryotherapy chambers. Personal chef. Zero alcohol. Zero tattoos — so he can donate blood more frequently. Every single detail is engineered for peak performance.</p>
+  <p>At Euro 2024, he burst into tears after missing a penalty vs Slovenia. Then stepped up first in the shootout and scored — the oldest player ever to score a penalty at the Euros. <em>"Sadness at the start is joy at the end. That's what football is."</em></p>
+</div>
+
+<!-- VIDEO 3 -->
+<div class="vid-section reveal">
+  <div class="vid-label">Training · Skill Session</div>
+  <div class="vid-title">Practice Makes Perfect — Behind the GOAT</div>
+  <video controls preload="metadata" class="main-video">
+    <source src="assets/videos/Practice_makes_perfect_ft__Cristiano_Ronaldo_720P_HD_.mp4" type="video/mp4">
+  </video>
+</div>
+
+<!-- SLIDE 2 -->
+<section class="gallery-section reveal">
+  <div class="gallery-section-title">📸 Gallery II — Trophies & Triumphs</div>
+  <div class="auto-gallery">
+    <div class="gallery-track anim-rev">
+      <div class="gslide" data-gallery="g2" data-idx="0"><img src="assets/slides/slide2/Cristiano_Ronaldo__.jpg" alt="CR7" loading="lazy"></div>
+      <div class="gslide" data-gallery="g2" data-idx="1"><img src="assets/slides/slide2/Cristiano_Ronaldo__1_.jpg" alt="CR7" loading="lazy"></div>
+      <div class="gslide" data-gallery="g2" data-idx="2"><img src="assets/slides/slide2/Cristiano_Ronaldo__3_.jpg" alt="CR7" loading="lazy"></div>
+      <div class="gslide" data-gallery="g2" data-idx="3"><img src="assets/slides/slide2/Cristiano_Ronaldo__5_.jpg" alt="CR7" loading="lazy"></div>
+      <div class="gslide" data-gallery="g2" data-idx="4"><img src="assets/slides/slide2/Cristiano_Ronaldo__6_.jpg" alt="CR7" loading="lazy"></div>
+      <div class="gslide" data-gallery="g2" data-idx="5"><img src="assets/slides/slide2/Cristiano_Ronaldo__UEFA_Nations_League_Champion_2019.jpg" alt="CR7" loading="lazy"></div>
+      <div class="gslide" data-gallery="g2" data-idx="6"><img src="assets/slides/slide2/Cristiano_Ronaldo___Cristiano_Ronaldo_wallpaper_Cristiano_Ronaldo_suiiiii__Hala_madrid.jpg" alt="CR7" loading="lazy"></div>
+      <div class="gslide" data-gallery="g2" data-idx="7"><img src="assets/slides/slide2/Cristiano_Ronaldo_pfp_icon.jpg" alt="CR7" loading="lazy"></div>
+      <div class="gslide" data-gallery="g2" data-idx="8"><img src="assets/slides/slide2/Cristiano_Ronaldo_wallpaper.jpg" alt="CR7" loading="lazy"></div>
+      <div class="gslide" data-gallery="g2" data-idx="9"><img src="assets/slides/slide2/Football_Players.jpg" alt="CR7" loading="lazy"></div>
+      <div class="gslide" data-gallery="g2" data-idx="0"><img src="assets/slides/slide2/Cristiano_Ronaldo__.jpg" alt="CR7" loading="lazy"></div>
+      <div class="gslide" data-gallery="g2" data-idx="1"><img src="assets/slides/slide2/Cristiano_Ronaldo__1_.jpg" alt="CR7" loading="lazy"></div>
+      <div class="gslide" data-gallery="g2" data-idx="2"><img src="assets/slides/slide2/Cristiano_Ronaldo__3_.jpg" alt="CR7" loading="lazy"></div>
+      <div class="gslide" data-gallery="g2" data-idx="3"><img src="assets/slides/slide2/Cristiano_Ronaldo__5_.jpg" alt="CR7" loading="lazy"></div>
+      <div class="gslide" data-gallery="g2" data-idx="4"><img src="assets/slides/slide2/Cristiano_Ronaldo__6_.jpg" alt="CR7" loading="lazy"></div>
+      <div class="gslide" data-gallery="g2" data-idx="5"><img src="assets/slides/slide2/Cristiano_Ronaldo__UEFA_Nations_League_Champion_2019.jpg" alt="CR7" loading="lazy"></div>
+      <div class="gslide" data-gallery="g2" data-idx="6"><img src="assets/slides/slide2/Cristiano_Ronaldo___Cristiano_Ronaldo_wallpaper_Cristiano_Ronaldo_suiiiii__Hala_madrid.jpg" alt="CR7" loading="lazy"></div>
+      <div class="gslide" data-gallery="g2" data-idx="7"><img src="assets/slides/slide2/Cristiano_Ronaldo_pfp_icon.jpg" alt="CR7" loading="lazy"></div>
+      <div class="gslide" data-gallery="g2" data-idx="8"><img src="assets/slides/slide2/Cristiano_Ronaldo_wallpaper.jpg" alt="CR7" loading="lazy"></div>
+      <div class="gslide" data-gallery="g2" data-idx="9"><img src="assets/slides/slide2/Football_Players.jpg" alt="CR7" loading="lazy"></div>
+    </div>
+  </div>
+</section>
+
+<!-- TEXT 4 -->
+<div class="text-block reveal">
+  <p class="section-label">International Glory</p>
+  <h2>Captain. Leader. <span class="gold">Portugal.</span></h2>
+  <p>No player has ever scored more international goals. Over <strong>130 goals for Portugal</strong> — a record no other player in world football history has come close to. The <strong>UEFA Euro 2016 victory</strong> in Paris remains his most emotional moment — leaving injured, then coaching from the sideline, willing his teammates to glory. The Nations League 2019 and 2025 followed. The 2026 World Cup is his final chapter.</p>
+</div>
+
+<!-- VIDEO 4 -->
+<div class="vid-section reveal">
+  <div class="vid-label">World Cup Magic · Portugal</div>
+  <div class="vid-title">Ronaldo's Best World Cup Goal — Pure Class</div>
+  <video controls preload="metadata" class="main-video">
+    <source src="assets/videos/Ronaldo_s_BEST_World_Cup_Goal__720P_HD_.mp4" type="video/mp4">
+  </video>
+</div>
+
+<!-- SLIDE 3 -->
+<section class="gallery-section reveal">
+  <div class="gallery-section-title">📸 Gallery III — For Club & Country</div>
+  <div class="auto-gallery">
+    <div class="gallery-track anim">
+      <div class="gslide" data-gallery="g3" data-idx="0"><img src="assets/slides/slide3/Football_taught_me_that_the_number_7_is_greater_than_10.jpg" alt="CR7" loading="lazy"></div>
+      <div class="gslide" data-gallery="g3" data-idx="1"><img src="assets/slides/slide3/GOAT_.jpg" alt="CR7" loading="lazy"></div>
+      <div class="gslide" data-gallery="g3" data-idx="2"><img src="assets/slides/slide3/Marcelo__Ronaldo_and_James.jpg" alt="CR7" loading="lazy"></div>
+      <div class="gslide" data-gallery="g3" data-idx="3"><img src="assets/slides/slide3/REPORT__Real_Madrid_1-1_Atletico_Madrid__AET__5-3_on_penalties_.jpg" alt="CR7" loading="lazy"></div>
+      <div class="gslide" data-gallery="g3" data-idx="4"><img src="assets/slides/slide3/Ronaldo_free_kick.jpg" alt="CR7" loading="lazy"></div>
+      <div class="gslide" data-gallery="g3" data-idx="5"><img src="assets/slides/slide3/Ronaldo_jumping.jpg" alt="CR7" loading="lazy"></div>
+      <div class="gslide" data-gallery="g3" data-idx="6"><img src="assets/slides/slide3/The_best_of_the_best_celebrating_.jpg" alt="CR7" loading="lazy"></div>
+      <div class="gslide" data-gallery="g3" data-idx="7"><img src="assets/slides/slide3/The_greatest_LB_-_LW_duo_ever____Ronaldo_real__Ronaldo_madrid__Real_madrid_cristiano_ronaldo.jpg" alt="CR7" loading="lazy"></div>
+      <div class="gslide" data-gallery="g3" data-idx="8"><img src="assets/slides/slide3/ronaldo_special.jpg" alt="CR7" loading="lazy"></div>
+      <div class="gslide" data-gallery="g3" data-idx="9"><img src="assets/slides/slide3/_header__juventus__italy__series__cr7.jpg" alt="CR7" loading="lazy"></div>
+      <div class="gslide" data-gallery="g3" data-idx="0"><img src="assets/slides/slide3/Football_taught_me_that_the_number_7_is_greater_than_10.jpg" alt="CR7" loading="lazy"></div>
+      <div class="gslide" data-gallery="g3" data-idx="1"><img src="assets/slides/slide3/GOAT_.jpg" alt="CR7" loading="lazy"></div>
+      <div class="gslide" data-gallery="g3" data-idx="2"><img src="assets/slides/slide3/Marcelo__Ronaldo_and_James.jpg" alt="CR7" loading="lazy"></div>
+      <div class="gslide" data-gallery="g3" data-idx="3"><img src="assets/slides/slide3/REPORT__Real_Madrid_1-1_Atletico_Madrid__AET__5-3_on_penalties_.jpg" alt="CR7" loading="lazy"></div>
+      <div class="gslide" data-gallery="g3" data-idx="4"><img src="assets/slides/slide3/Ronaldo_free_kick.jpg" alt="CR7" loading="lazy"></div>
+      <div class="gslide" data-gallery="g3" data-idx="5"><img src="assets/slides/slide3/Ronaldo_jumping.jpg" alt="CR7" loading="lazy"></div>
+      <div class="gslide" data-gallery="g3" data-idx="6"><img src="assets/slides/slide3/The_best_of_the_best_celebrating_.jpg" alt="CR7" loading="lazy"></div>
+      <div class="gslide" data-gallery="g3" data-idx="7"><img src="assets/slides/slide3/The_greatest_LB_-_LW_duo_ever____Ronaldo_real__Ronaldo_madrid__Real_madrid_cristiano_ronaldo.jpg" alt="CR7" loading="lazy"></div>
+      <div class="gslide" data-gallery="g3" data-idx="8"><img src="assets/slides/slide3/ronaldo_special.jpg" alt="CR7" loading="lazy"></div>
+      <div class="gslide" data-gallery="g3" data-idx="9"><img src="assets/slides/slide3/_header__juventus__italy__series__cr7.jpg" alt="CR7" loading="lazy"></div>
+    </div>
+  </div>
+</section>
+
+<!-- TEXT 5 -->
+<div class="text-block reveal">
+  <p class="section-label">Juventus · Return · Al-Nassr</p>
+  <h2>Italy, Old Trafford &<span class="gold"> Saudi Arabia</span></h2>
+  <p>Three Serie A titles at Juventus. A hat-trick vs Atlético Madrid after they thought they had eliminated him. His <strong>second Manchester United return in 2021</strong> brought a 95th-minute UCL header vs Villarreal that made Old Trafford erupt. Now at Al-Nassr at 40+, still breaking records. <strong>Goal 500 for club football in June 2024.</strong> Still SIUUU.</p>
+</div>
+
+<!-- VIDEO 5 -->
+<div class="vid-section reveal">
+  <div class="vid-label">UCL 2018 · The Bicycle Kick</div>
+  <div class="vid-title">Greatest Champions League Goal Ever Scored</div>
+  <video controls preload="metadata" class="main-video">
+    <source src="assets/videos/Ronaldo_bicycle_kick_4k__Free_clip__No_watermark_720P_HD_.mp4" type="video/mp4">
+  </video>
+</div>
+
+<!-- SLIDE 4 -->
+<section class="gallery-section reveal">
+  <div class="gallery-section-title">📸 Gallery IV — Pure Ronaldo</div>
+  <div class="auto-gallery">
+    <div class="gallery-track anim-rev">
+      <div class="gslide" data-gallery="g4" data-idx="0"><img src="assets/slides/slide4/download__10_.jpg" alt="CR7" loading="lazy"></div>
+      <div class="gslide" data-gallery="g4" data-idx="1"><img src="assets/slides/slide4/download__11_.jpg" alt="CR7" loading="lazy"></div>
+      <div class="gslide" data-gallery="g4" data-idx="2"><img src="assets/slides/slide4/download__12_.jpg" alt="CR7" loading="lazy"></div>
+      <div class="gslide" data-gallery="g4" data-idx="3"><img src="assets/slides/slide4/download__13_.jpg" alt="CR7" loading="lazy"></div>
+      <div class="gslide" data-gallery="g4" data-idx="4"><img src="assets/slides/slide4/download__14_.jpg" alt="CR7" loading="lazy"></div>
+      <div class="gslide" data-gallery="g4" data-idx="5"><img src="assets/slides/slide4/download__15_.jpg" alt="CR7" loading="lazy"></div>
+      <div class="gslide" data-gallery="g4" data-idx="6"><img src="assets/slides/slide4/download__16_.jpg" alt="CR7" loading="lazy"></div>
+      <div class="gslide" data-gallery="g4" data-idx="7"><img src="assets/slides/slide4/download__17_.jpg" alt="CR7" loading="lazy"></div>
+      <div class="gslide" data-gallery="g4" data-idx="8"><img src="assets/slides/slide4/download__18_.jpg" alt="CR7" loading="lazy"></div>
+      <div class="gslide" data-gallery="g4" data-idx="9"><img src="assets/slides/slide4/download__19_.jpg" alt="CR7" loading="lazy"></div>
+      <div class="gslide" data-gallery="g4" data-idx="0"><img src="assets/slides/slide4/download__10_.jpg" alt="CR7" loading="lazy"></div>
+      <div class="gslide" data-gallery="g4" data-idx="1"><img src="assets/slides/slide4/download__11_.jpg" alt="CR7" loading="lazy"></div>
+      <div class="gslide" data-gallery="g4" data-idx="2"><img src="assets/slides/slide4/download__12_.jpg" alt="CR7" loading="lazy"></div>
+      <div class="gslide" data-gallery="g4" data-idx="3"><img src="assets/slides/slide4/download__13_.jpg" alt="CR7" loading="lazy"></div>
+      <div class="gslide" data-gallery="g4" data-idx="4"><img src="assets/slides/slide4/download__14_.jpg" alt="CR7" loading="lazy"></div>
+      <div class="gslide" data-gallery="g4" data-idx="5"><img src="assets/slides/slide4/download__15_.jpg" alt="CR7" loading="lazy"></div>
+      <div class="gslide" data-gallery="g4" data-idx="6"><img src="assets/slides/slide4/download__16_.jpg" alt="CR7" loading="lazy"></div>
+      <div class="gslide" data-gallery="g4" data-idx="7"><img src="assets/slides/slide4/download__17_.jpg" alt="CR7" loading="lazy"></div>
+      <div class="gslide" data-gallery="g4" data-idx="8"><img src="assets/slides/slide4/download__18_.jpg" alt="CR7" loading="lazy"></div>
+      <div class="gslide" data-gallery="g4" data-idx="9"><img src="assets/slides/slide4/download__19_.jpg" alt="CR7" loading="lazy"></div>
+    </div>
+  </div>
+</section>
+
+<!-- SLIDE 5 -->
+<section class="gallery-section reveal">
+  <div class="gallery-section-title">📸 Gallery V — Icons & Moments</div>
+  <div class="auto-gallery">
+    <div class="gallery-track anim">
+      <div class="gslide" data-gallery="g5" data-idx="0"><img src="assets/slides/slide5/download__20_.jpg" alt="CR7" loading="lazy"></div>
+      <div class="gslide" data-gallery="g5" data-idx="1"><img src="assets/slides/slide5/download__21_.jpg" alt="CR7" loading="lazy"></div>
+      <div class="gslide" data-gallery="g5" data-idx="2"><img src="assets/slides/slide5/download__22_.jpg" alt="CR7" loading="lazy"></div>
+      <div class="gslide" data-gallery="g5" data-idx="3"><img src="assets/slides/slide5/download__23_.jpg" alt="CR7" loading="lazy"></div>
+      <div class="gslide" data-gallery="g5" data-idx="4"><img src="assets/slides/slide5/download__24_.jpg" alt="CR7" loading="lazy"></div>
+      <div class="gslide" data-gallery="g5" data-idx="5"><img src="assets/slides/slide5/download__25_.jpg" alt="CR7" loading="lazy"></div>
+      <div class="gslide" data-gallery="g5" data-idx="6"><img src="assets/slides/slide5/download__26_.jpg" alt="CR7" loading="lazy"></div>
+      <div class="gslide" data-gallery="g5" data-idx="7"><img src="assets/slides/slide5/download__27_.jpg" alt="CR7" loading="lazy"></div>
+      <div class="gslide" data-gallery="g5" data-idx="8"><img src="assets/slides/slide5/download__28_.jpg" alt="CR7" loading="lazy"></div>
+      <div class="gslide" data-gallery="g5" data-idx="9"><img src="assets/slides/slide5/download__29_.jpg" alt="CR7" loading="lazy"></div>
+      <div class="gslide" data-gallery="g5" data-idx="0"><img src="assets/slides/slide5/download__20_.jpg" alt="CR7" loading="lazy"></div>
+      <div class="gslide" data-gallery="g5" data-idx="1"><img src="assets/slides/slide5/download__21_.jpg" alt="CR7" loading="lazy"></div>
+      <div class="gslide" data-gallery="g5" data-idx="2"><img src="assets/slides/slide5/download__22_.jpg" alt="CR7" loading="lazy"></div>
+      <div class="gslide" data-gallery="g5" data-idx="3"><img src="assets/slides/slide5/download__23_.jpg" alt="CR7" loading="lazy"></div>
+      <div class="gslide" data-gallery="g5" data-idx="4"><img src="assets/slides/slide5/download__24_.jpg" alt="CR7" loading="lazy"></div>
+      <div class="gslide" data-gallery="g5" data-idx="5"><img src="assets/slides/slide5/download__25_.jpg" alt="CR7" loading="lazy"></div>
+      <div class="gslide" data-gallery="g5" data-idx="6"><img src="assets/slides/slide5/download__26_.jpg" alt="CR7" loading="lazy"></div>
+      <div class="gslide" data-gallery="g5" data-idx="7"><img src="assets/slides/slide5/download__27_.jpg" alt="CR7" loading="lazy"></div>
+      <div class="gslide" data-gallery="g5" data-idx="8"><img src="assets/slides/slide5/download__28_.jpg" alt="CR7" loading="lazy"></div>
+      <div class="gslide" data-gallery="g5" data-idx="9"><img src="assets/slides/slide5/download__29_.jpg" alt="CR7" loading="lazy"></div>
+    </div>
+  </div>
+</section>
+
+<!-- MORE VIDEOS -->
+<div class="vid-section reveal">
+  <div class="vid-label">Free Kick vs Courtois</div>
+  <div class="vid-title">35-Yard Thunderbolt — Pure Raw Power</div>
+  <video controls preload="metadata" class="main-video">
+    <source src="assets/videos/Ronaldo_35_yard_free_kick_vs_Courtois____720P_HD_.mp4" type="video/mp4">
+  </video>
+</div>
+
+<div class="vid-section reveal">
+  <div class="vid-label">Serie A · Sampdoria vs Juventus</div>
+  <div class="vid-title">Insane Leap — The Athletic Peak</div>
+  <video controls preload="metadata" class="main-video">
+    <source src="assets/videos/Ronaldo_Scores_Insane_Goal_With_Giant_Leap____Sampdoria_1-2_Juventus___Top_Moment___Serie_A_TIM_720P_HD_.mp4" type="video/mp4">
+  </video>
+</div>
+
+<div class="vid-section reveal">
+  <div class="vid-label">Header vs Roma</div>
+  <div class="vid-title">Crazy Header — Higher Than NBA Players</div>
+  <video controls preload="metadata" class="main-video">
+    <source src="assets/videos/Ronaldo_CRAZY_Header_vs_Roma_____shorts_720P_HD_.mp4" type="video/mp4">
+  </video>
+</div>
+
+<div class="vid-section reveal">
+  <div class="vid-label">vs Inter Milan · Serie A</div>
+  <div class="vid-title">Ronaldo Always Scores Against Inter</div>
+  <video controls preload="metadata" class="main-video">
+    <source src="assets/videos/Ronaldo_loves_scoring_against_Inter____720P_HD_.mp4" type="video/mp4">
+  </video>
+</div>
+
+<div class="vid-section reveal">
+  <div class="vid-label">United vs Arsenal · The Free Kick</div>
+  <div class="vid-title">Too Far? Never Too Far For CR7</div>
+  <video controls preload="metadata" class="main-video">
+    <source src="assets/videos/Too_far_for_Ronaldo_to_think_about_it_freekick___United_vs_arsenal___full_match____ronaldo__football_720P_60FPS_.mp4" type="video/mp4">
+  </video>
+</div>
+
+<div class="vid-section reveal">
+  <div class="vid-label">Unreal Free Kick</div>
+  <div class="vid-title">The Art of the Knuckleball</div>
+  <video controls preload="metadata" class="main-video">
+    <source src="assets/videos/UNREAL_Ronaldo_Free-Kick____720P_HD_.mp4" type="video/mp4">
+  </video>
+</div>
+
+<div class="vid-section reveal">
+  <div class="vid-label">Special Edit · CR7</div>
+  <div class="vid-title">Cristiano Ronaldo — The Story in Motion</div>
+  <video controls preload="metadata" class="main-video">
+    <source src="assets/videos/Cristiano_Ronaldo_Special_720P.mp4" type="video/mp4">
+  </video>
+</div>
+
+<div class="divider"></div>
+
+<!-- GOALS -->
+<section id="goals" class="reveal">
+  <div class="goals-header">
+    <p class="section-label">Hall of Fame</p>
+    <h2>500 Goals · <span class="gold">The Complete Record</span></h2>
+    <p style="color:var(--grey);font-family:'Orbitron',sans-serif;font-size:.65rem;letter-spacing:3px;margin-top:12px;">Sporting CP · Manchester United · Real Madrid · Juventus · Al-Nassr</p>
+  </div>
+
+  <div class="goals-era">
+    <div class="era-title">🔴 Era I — Sporting CP & Manchester United (2002–2009)</div>
+    <div class="era-sub">Goals 1–100 · 3 Premier League Titles · 1 Champions League · 1st Ballon d'Or · Age 17→24</div>
+    <div class="goals-grid">
+      <div class="goal-card"><div class="goal-num">#1</div><div class="goal-meta"><span class="goal-date">Oct 2002</span><span class="goal-club">Sporting CP</span></div><div class="goal-vs">vs <strong>Moreirense</strong></div><div class="goal-info"><span class="tag">Primeira Liga</span><span class="tag tag-type">Right foot</span></div></div>
+      <div class="goal-card"><div class="goal-num">#3</div><div class="goal-meta"><span class="goal-date">Apr 2003</span><span class="goal-club">Sporting CP</span></div><div class="goal-vs">vs <strong>Inter Guimarães</strong></div><div class="goal-info"><span class="tag">Primeira Liga</span><span class="tag tag-type">Left foot</span></div></div>
+      <div class="goal-card"><div class="goal-num">#4</div><div class="goal-meta"><span class="goal-date">Oct 2003</span><span class="goal-club">Man United</span></div><div class="goal-vs">vs <strong>Portsmouth</strong></div><div class="goal-info"><span class="tag">Premier League</span><span class="tag tag-type">Free kick</span></div></div>
+      <div class="goal-card"><div class="goal-num">#9</div><div class="goal-meta"><span class="goal-date">Sep 2004</span><span class="goal-club">Man United</span></div><div class="goal-vs">vs <strong>Liverpool</strong></div><div class="goal-info"><span class="tag">Premier League</span><span class="tag tag-type">Right foot</span><span class="tag tag-assist">Assist: Rooney</span></div></div>
+      <div class="goal-card"><div class="goal-num">#22</div><div class="goal-meta"><span class="goal-date">Feb 2006</span><span class="goal-club">Man United</span></div><div class="goal-vs">vs <strong>Liverpool</strong></div><div class="goal-info"><span class="tag">Premier League</span><span class="tag tag-type">Free kick</span></div></div>
+      <div class="goal-card"><div class="goal-num">#40</div><div class="goal-meta"><span class="goal-date">Apr 2007</span><span class="goal-club">Man United</span></div><div class="goal-vs">vs <strong>Roma</strong></div><div class="goal-info"><span class="tag">UCL QF</span><span class="tag tag-type">Left foot</span><span class="tag tag-assist">Solo run</span></div></div>
+      <div class="goal-card"><div class="goal-num">#62</div><div class="goal-meta"><span class="goal-date">Jan 2008</span><span class="goal-club">Man United</span></div><div class="goal-vs">vs <strong>Portsmouth</strong></div><div class="goal-info"><span class="tag">Premier League</span><span class="tag tag-type">Free kick</span></div></div>
+      <div class="goal-card milestone"><div class="goal-num big">#77</div><div class="goal-meta"><span class="goal-date">May 2008</span><span class="goal-club">Man United</span></div><div class="goal-vs">vs <strong>Chelsea</strong> 🏆 Moscow</div><div class="goal-info"><span class="tag">UCL Final</span><span class="tag tag-type">Header</span><span class="tag tag-milestone">Champions League Winner</span></div></div>
+      <div class="goal-card"><div class="goal-num">#89</div><div class="goal-meta"><span class="goal-date">Mar 2009</span><span class="goal-club">Man United</span></div><div class="goal-vs">vs <strong>Aston Villa</strong></div><div class="goal-info"><span class="tag">Premier League</span><span class="tag tag-type">Header</span></div></div>
+      <div class="goal-card milestone"><div class="goal-num big">#100</div><div class="goal-meta"><span class="goal-date">Apr 2009</span><span class="goal-club">Man United</span></div><div class="goal-vs">vs <strong>Arsenal</strong> 🎯 UCL SF</div><div class="goal-info"><span class="tag">UCL Semi-Final</span><span class="tag tag-type">Right foot</span><span class="tag tag-milestone">Milestone Goal</span></div></div>
+    </div>
+  </div>
+
+  <div class="goals-era">
+    <div class="era-title">⚪ Era II — Real Madrid (2009–2018)</div>
+    <div class="era-sub">Goals 101–400 · 4 UCL Titles · 4 Ballon d'Or · Real Madrid All-Time Top Scorer · 450 Goals</div>
+    <div class="goals-grid">
+      <div class="goal-card"><div class="goal-num">#102</div><div class="goal-meta"><span class="goal-date">Aug 2009</span><span class="goal-club">Real Madrid</span></div><div class="goal-vs">vs <strong>Deportivo</strong></div><div class="goal-info"><span class="tag">La Liga</span><span class="tag tag-type">Right foot</span><span class="tag tag-assist">Benzema</span></div></div>
+      <div class="goal-card"><div class="goal-num">#130</div><div class="goal-meta"><span class="goal-date">Oct 2010</span><span class="goal-club">Real Madrid</span></div><div class="goal-vs">vs <strong>Deportivo</strong></div><div class="goal-info"><span class="tag">La Liga</span><span class="tag tag-type">Hat-trick</span></div></div>
+      <div class="goal-card"><div class="goal-num">#150</div><div class="goal-meta"><span class="goal-date">Mar 2011</span><span class="goal-club">Real Madrid</span></div><div class="goal-vs">vs <strong>Barcelona</strong></div><div class="goal-info"><span class="tag">La Liga</span><span class="tag tag-type">Right foot</span><span class="tag tag-assist">Benzema</span></div></div>
+      <div class="goal-card"><div class="goal-num">#169</div><div class="goal-meta"><span class="goal-date">Jan 2012</span><span class="goal-club">Real Madrid</span></div><div class="goal-vs">vs <strong>Malaga</strong></div><div class="goal-info"><span class="tag">La Liga</span><span class="tag tag-type">100th La Liga Goal</span><span class="tag tag-milestone">Record Speed</span></div></div>
+      <div class="goal-card milestone"><div class="goal-num big">#200</div><div class="goal-meta"><span class="goal-date">Mar 2013</span><span class="goal-club">Real Madrid</span></div><div class="goal-vs">vs <strong>Rayo Vallecano</strong> 🎯</div><div class="goal-info"><span class="tag">La Liga</span><span class="tag tag-type">Right foot</span><span class="tag tag-milestone">200 Club Goals</span></div></div>
+      <div class="goal-card milestone"><div class="goal-num">#230</div><div class="goal-meta"><span class="goal-date">May 2014</span><span class="goal-club">Real Madrid</span></div><div class="goal-vs">vs <strong>Atlético Madrid</strong> 🏆</div><div class="goal-info"><span class="tag">UCL Final</span><span class="tag tag-type">Penalty</span><span class="tag tag-milestone">La Décima</span></div></div>
+      <div class="goal-card"><div class="goal-num">#266</div><div class="goal-meta"><span class="goal-date">Oct 2015</span><span class="goal-club">Real Madrid</span></div><div class="goal-vs">vs <strong>Espanyol</strong></div><div class="goal-info"><span class="tag">La Liga</span><span class="tag tag-type">Broke Raúl's Record</span><span class="tag tag-milestone">All-Time Top Scorer</span></div></div>
+      <div class="goal-card milestone"><div class="goal-num big">#300</div><div class="goal-meta"><span class="goal-date">Feb 2016</span><span class="goal-club">Real Madrid</span></div><div class="goal-vs">vs <strong>Eibar</strong> 🎯</div><div class="goal-info"><span class="tag">La Liga</span><span class="tag tag-type">Header</span><span class="tag tag-assist">Bale</span></div></div>
+      <div class="goal-card" style="border-color:rgba(255,120,120,.3);background:rgba(255,50,50,.04);"><div class="goal-num">#350</div><div class="goal-meta"><span class="goal-date">Apr 2017</span><span class="goal-club">Real Madrid</span></div><div class="goal-vs">vs <strong>Juventus</strong> ✨ Standing Ovation</div><div class="goal-info"><span class="tag">UCL QF</span><span class="tag tag-type">Bicycle Kick</span><span class="tag tag-milestone">Best UCL Goal Ever</span></div></div>
+      <div class="goal-card milestone"><div class="goal-num big">#400</div><div class="goal-meta"><span class="goal-date">Mar 2019</span><span class="goal-club">Juventus</span></div><div class="goal-vs">vs <strong>Atlético Madrid</strong> 🏆</div><div class="goal-info"><span class="tag">UCL R16</span><span class="tag tag-type">Hat-trick</span><span class="tag tag-milestone">Greatest Comeback Ever</span></div></div>
+    </div>
+  </div>
+
+  <div class="goals-era">
+    <div class="era-title">🟡 Era III — Man United Return & Al-Nassr (2021–Present)</div>
+    <div class="era-sub">Goals 401–500+ · First Human Ever to Score 500 Club Goals · Still Breaking Records at 40+</div>
+    <div class="goals-grid">
+      <div class="goal-card"><div class="goal-num">#420</div><div class="goal-meta"><span class="goal-date">Sep 2021</span><span class="goal-club">Man United</span></div><div class="goal-vs">vs <strong>Villarreal</strong> ⚡ 95th Min</div><div class="goal-info"><span class="tag">UCL Group</span><span class="tag tag-type">Header</span><span class="tag tag-assist">Luke Shaw</span></div></div>
+      <div class="goal-card"><div class="goal-num">#442</div><div class="goal-meta"><span class="goal-date">Oct 2021</span><span class="goal-club">Man United</span></div><div class="goal-vs">vs <strong>Liverpool</strong></div><div class="goal-info"><span class="tag">Premier League</span><span class="tag tag-type">Hat-trick</span></div></div>
+      <div class="goal-card"><div class="goal-num">#460</div><div class="goal-meta"><span class="goal-date">Nov 2021</span><span class="goal-club">Man United</span></div><div class="goal-vs">vs <strong>Arsenal</strong></div><div class="goal-info"><span class="tag">Premier League</span><span class="tag tag-type">Right foot</span></div></div>
+      <div class="goal-card"><div class="goal-num">#475</div><div class="goal-meta"><span class="goal-date">Mar 2023</span><span class="goal-club">Al-Nassr</span></div><div class="goal-vs">vs <strong>Al-Ittihad</strong></div><div class="goal-info"><span class="tag">Saudi Pro League</span><span class="tag tag-type">Right foot</span><span class="tag tag-assist">Talisca</span></div></div>
+      <div class="goal-card"><div class="goal-num">#490</div><div class="goal-meta"><span class="goal-date">Feb 2024</span><span class="goal-club">Al-Nassr</span></div><div class="goal-vs">vs <strong>Al-Taawoun</strong></div><div class="goal-info"><span class="tag">Saudi Pro League</span><span class="tag tag-type">Penalty</span></div></div>
+      <div class="goal-card" style="border-color:var(--gold);background:rgba(200,169,81,.1);box-shadow:0 0 40px rgba(200,169,81,.2);"><div class="goal-num big" style="font-size:4rem;text-shadow:0 0 20px rgba(200,169,81,.6);">#500</div><div class="goal-meta"><span class="goal-date">Jun 2024</span><span class="goal-club">Al-Nassr</span></div><div class="goal-vs">vs <strong>Al-Fayha</strong> 👑 History</div><div class="goal-info"><span class="tag">Saudi Pro League</span><span class="tag tag-type">Right foot</span><span class="tag tag-milestone">First Human Ever — 500 Club Goals</span></div></div>
+    </div>
+  </div>
+  <div style="text-align:center;margin-top:44px;font-family:'Orbitron',sans-serif;font-size:.65rem;letter-spacing:4px;color:rgba(200,169,81,.5);">⚽ 500 CLUB GOALS · 130+ INTERNATIONAL GOALS · STILL COUNTING · SIUUUU 🐐</div>
+</section>
+
+<div class="divider"></div>
+
+<!-- USE IMAGES -->
+<section id="use-imgs" class="reveal">
+  <p class="section-label" style="text-align:center;">The GOAT Collection</p>
+  <h2 class="section-title" style="text-align:center;">Ronaldo <span class="gold">Moments</span></h2>
+  <div class="use-grid">
+    <div class="use-img" data-gallery="use" data-idx="0"><img src="assets/slides/use/download__7_.jpg" alt="CR7" loading="lazy"></div>
+    <div class="use-img" data-gallery="use" data-idx="1"><img src="assets/slides/use/download__8_.jpg" alt="CR7" loading="lazy"></div>
+    <div class="use-img" data-gallery="use" data-idx="2"><img src="assets/slides/use/download__9_.jpg" alt="CR7" loading="lazy"></div>
+    <div class="use-img" data-gallery="use" data-idx="3"><img src="assets/slides/use/download__30_.jpg" alt="CR7" loading="lazy"></div>
+    <div class="use-img" data-gallery="use" data-idx="4"><img src="assets/slides/use/download__31_.jpg" alt="CR7" loading="lazy"></div>
+    <div class="use-img" data-gallery="use" data-idx="5"><img src="assets/slides/use/download__32_.jpg" alt="CR7" loading="lazy"></div>
+    <div class="use-img" data-gallery="use" data-idx="6"><img src="assets/slides/use/download__33_.jpg" alt="CR7" loading="lazy"></div>
+    <div class="use-img" data-gallery="use" data-idx="7"><img src="assets/slides/use/download__34_.jpg" alt="CR7" loading="lazy"></div>
+    <div class="use-img" data-gallery="use" data-idx="8"><img src="assets/slides/use/download__35_.jpg" alt="CR7" loading="lazy"></div>
+    <div class="use-img" data-gallery="use" data-idx="9"><img src="assets/slides/use/download__36_.jpg" alt="CR7" loading="lazy"></div>
+    <div class="use-img" data-gallery="use" data-idx="10"><img src="assets/slides/use/the_goat.jpg" alt="CR7" loading="lazy"></div>
+    <div class="use-img" data-gallery="use" data-idx="11"><img src="assets/slides/use/cute_emoji.jpg" alt="CR7" loading="lazy"></div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- LINKS -->
+<section id="links" class="reveal">
+  <div class="links-inner">
+    <p class="section-label">Connect with the GOAT</p>
+    <h2 class="section-title">Ronaldo's <span class="gold">Universe</span></h2>
+    <div class="links-grid">
+      <a href="https://www.instagram.com/cristiano" target="_blank" class="link-card"><div class="link-icon">📷</div><div class="link-name">Instagram</div><div class="link-sub">@cristiano · 658M followers</div></a>
+      <a href="https://www.youtube.com/@URCristiano" target="_blank" class="link-card"><div class="link-icon">▶️</div><div class="link-name">YouTube</div><div class="link-sub">UR Cristiano · 66M+ subs</div></a>
+      <a href="https://twitter.com/Cristiano" target="_blank" class="link-card"><div class="link-icon">🐦</div><div class="link-name">X / Twitter</div><div class="link-sub">@Cristiano</div></a>
+      <a href="https://www.facebook.com/Cristiano" target="_blank" class="link-card"><div class="link-icon">📘</div><div class="link-name">Facebook</div><div class="link-sub">180M+ Likes</div></a>
+      <a href="https://www.cr7.com" target="_blank" class="link-card"><div class="link-icon">👑</div><div class="link-name">CR7 Brand</div><div class="link-sub">Official Store</div></a>
+      <a href="https://www.pestanacr7.com" target="_blank" class="link-card"><div class="link-icon">🏨</div><div class="link-name">CR7 Hotels</div><div class="link-sub">Pestana CR7</div></a>
+      <a href="https://www.instagram.com/georginagio" target="_blank" class="link-card"><div class="link-icon">💫</div><div class="link-name">Georgina IG</div><div class="link-sub">@georginagio · 60M+</div></a>
+      <a href="https://www.netflix.com/title/81523649" target="_blank" class="link-card"><div class="link-icon">🎬</div><div class="link-name">I Am Georgina</div><div class="link-sub">Netflix Documentary</div></a>
+      <a href="https://al-nassr.com" target="_blank" class="link-card"><div class="link-icon">⚽</div><div class="link-name">Al-Nassr FC</div><div class="link-sub">Current Club</div></a>
+      <a href="https://www.nike.com/cr7" target="_blank" class="link-card"><div class="link-icon">👟</div><div class="link-name">Nike CR7</div><div class="link-sub">Lifetime Deal $1B+</div></a>
+      <a href="https://www.tagheuer.com" target="_blank" class="link-card"><div class="link-icon">⌚</div><div class="link-name">TAG Heuer</div><div class="link-sub">Brand Ambassador</div></a>
+      <a href="https://www.herbalife.com" target="_blank" class="link-card"><div class="link-icon">💊</div><div class="link-name">Herbalife</div><div class="link-sub">CR7 Partner</div></a>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- GEORGINA -->
+<section id="georgina">
+  <div class="geo-header reveal">
+    <p class="section-label">A Modern Love Story</p>
+    <div class="geo-title">Ronaldo &<br>Georgina</div>
+    <div class="geo-sub">Together Since 2016 · Engaged August 2025 · Wedding 2026 · Madeira</div>
+    <div class="kiss-placeholder">💋</div>
+  </div>
+
+  <div class="gallery-section reveal" style="background:var(--dark2);">
+    <div class="gallery-section-title">❤️ Their Story in Pictures</div>
+    <div class="auto-gallery">
+      <div class="gallery-track anim">
+        <div class="gslide" data-gallery="gg" data-idx="0"><img src="assets/slides/georgina/download__10_.jpg" alt="Georgina" loading="lazy"></div>
+        <div class="gslide" data-gallery="gg" data-idx="1"><img src="assets/slides/georgina/download__11_.jpg" alt="Georgina" loading="lazy"></div>
+        <div class="gslide" data-gallery="gg" data-idx="2"><img src="assets/slides/georgina/download__12_.jpg" alt="Georgina" loading="lazy"></div>
+        <div class="gslide" data-gallery="gg" data-idx="3"><img src="assets/slides/georgina/download__13_.jpg" alt="Georgina" loading="lazy"></div>
+        <div class="gslide" data-gallery="gg" data-idx="4"><img src="assets/slides/georgina/Ronaldo_and_georgina__.jpg" alt="Georgina" loading="lazy"></div>
+        <div class="gslide" data-gallery="gg" data-idx="5"><img src="assets/slides/georgina/cristiano_ronaldo_Love_is_georgina_rodriguez.jpg" alt="Georgina" loading="lazy"></div>
+        <div class="gslide" data-gallery="gg" data-idx="6"><img src="assets/slides/georgina/cristiano_ronaldo_and_georgina.jpg" alt="Georgina" loading="lazy"></div>
+        <div class="gslide" data-gallery="gg" data-idx="7"><img src="assets/slides/georgina/C_Ronaldo_y_Georgina.jpg" alt="Georgina" loading="lazy"></div>
+        <div class="gslide" data-gallery="gg" data-idx="8"><img src="assets/slides/georgina/Cristiano_Ronaldo___Georgina_Rodriguez.jpg" alt="Georgina" loading="lazy"></div>
+        <div class="gslide" data-gallery="gg" data-idx="9"><img src="assets/slides/georgina/arabic_couple.jpg" alt="Georgina" loading="lazy"></div>
+        <div class="gslide" data-gallery="gg" data-idx="0"><img src="assets/slides/georgina/download__10_.jpg" alt="Georgina" loading="lazy"></div>
+        <div class="gslide" data-gallery="gg" data-idx="1"><img src="assets/slides/georgina/download__11_.jpg" alt="Georgina" loading="lazy"></div>
+        <div class="gslide" data-gallery="gg" data-idx="2"><img src="assets/slides/georgina/download__12_.jpg" alt="Georgina" loading="lazy"></div>
+        <div class="gslide" data-gallery="gg" data-idx="3"><img src="assets/slides/georgina/download__13_.jpg" alt="Georgina" loading="lazy"></div>
+        <div class="gslide" data-gallery="gg" data-idx="4"><img src="assets/slides/georgina/Ronaldo_and_georgina__.jpg" alt="Georgina" loading="lazy"></div>
+        <div class="gslide" data-gallery="gg" data-idx="5"><img src="assets/slides/georgina/cristiano_ronaldo_Love_is_georgina_rodriguez.jpg" alt="Georgina" loading="lazy"></div>
+        <div class="gslide" data-gallery="gg" data-idx="6"><img src="assets/slides/georgina/cristiano_ronaldo_and_georgina.jpg" alt="Georgina" loading="lazy"></div>
+        <div class="gslide" data-gallery="gg" data-idx="7"><img src="assets/slides/georgina/C_Ronaldo_y_Georgina.jpg" alt="Georgina" loading="lazy"></div>
+        <div class="gslide" data-gallery="gg" data-idx="8"><img src="assets/slides/georgina/Cristiano_Ronaldo___Georgina_Rodriguez.jpg" alt="Georgina" loading="lazy"></div>
+        <div class="gslide" data-gallery="gg" data-idx="9"><img src="assets/slides/georgina/arabic_couple.jpg" alt="Georgina" loading="lazy"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="geo-text-section reveal">
+    <p><strong>Georgina Rodríguez</strong> (born January 27, 1994) is an Argentine-Spanish model, entrepreneur, and Netflix star. She met Ronaldo in 2016 at a Gucci store in Madrid where she worked as a sales assistant. A chance encounter between two people with huge dreams — and it changed both their lives forever.</p>
+    <div class="quote-block">
+      <p>"It is with our deepest sadness we have to announce that our baby boy has passed away. It is the greatest pain that any parents can feel."</p>
+      <cite>— Cristiano & Georgina · April 2022</cite>
+    </div>
+    <p>Together they raise five children — <strong>Cristiano Jr., twins Eva & Mateo, Alana Martina, and Bella Esmeralda</strong>. On <strong>August 11, 2025</strong>, Georgina announced their engagement on Instagram with the caption <em>"Yes, I do."</em> Ronaldo revealed it was spontaneous — 1am, daughters asleep, he got down on one knee. Their daughters walked in mid-proposal.</p>
+    <div class="quote-block">
+      <p>"I always say that good things happen at the right time."</p>
+      <cite>— Cristiano Ronaldo · On the Engagement</cite>
+    </div>
+    <p>The wedding is planned for <strong>Summer 2026 at Funchal Cathedral, Madeira</strong> — Ronaldo's birthplace — after the FIFA World Cup. Georgina has her own empire: Netflix's <em>I Am Georgina</em>, Vogue/Elle covers, Paris Fashion Week runway, 60M+ Instagram followers, and multiple business ventures.</p>
+    <div class="stat-row">
+      <div class="stat-box"><div class="n">9</div><div class="l">Years Together</div></div>
+      <div class="stat-box"><div class="n">5</div><div class="l">Children</div></div>
+      <div class="stat-box"><div class="n">2025</div><div class="l">Engagement</div></div>
+      <div class="stat-box"><div class="n">2026</div><div class="l">Wedding Year</div></div>
+    </div>
+  </div>
+
+  <div class="geo-grid reveal">
+    <div class="geo-grid-item" data-gallery="geo" data-idx="0"><img src="assets/slides/georgina/download__10_.jpg" alt="Georgina" loading="lazy"></div>
+    <div class="geo-grid-item" data-gallery="geo" data-idx="1"><img src="assets/slides/georgina/download__11_.jpg" alt="Georgina" loading="lazy"></div>
+    <div class="geo-grid-item" data-gallery="geo" data-idx="2"><img src="assets/slides/georgina/download__12_.jpg" alt="Georgina" loading="lazy"></div>
+    <div class="geo-grid-item" data-gallery="geo" data-idx="3"><img src="assets/slides/georgina/download__13_.jpg" alt="Georgina" loading="lazy"></div>
+    <div class="geo-grid-item" data-gallery="geo" data-idx="4"><img src="assets/slides/georgina/Ronaldo_and_georgina__.jpg" alt="Georgina" loading="lazy"></div>
+    <div class="geo-grid-item" data-gallery="geo" data-idx="5"><img src="assets/slides/georgina/arabic_couple.jpg" alt="Georgina" loading="lazy"></div>
+    <div class="geo-grid-item" data-gallery="geo" data-idx="6"><img src="assets/slides/georgina/cristiano_ronaldo_Love_is_georgina_rodriguez.jpg" alt="Georgina" loading="lazy"></div>
+    <div class="geo-grid-item" data-gallery="geo" data-idx="7"><img src="assets/slides/georgina/cristiano_ronaldo_Love_is_georgina_rodriguez__1_.jpg" alt="Georgina" loading="lazy"></div>
+    <div class="geo-grid-item" data-gallery="geo" data-idx="8"><img src="assets/slides/georgina/cristiano_ronaldo_and_georgina.jpg" alt="Georgina" loading="lazy"></div>
+    <div class="geo-grid-item" data-gallery="geo" data-idx="9"><img src="assets/slides/georgina/cristiano_ronaldo_e_georgina_rodriguez.jpg" alt="Georgina" loading="lazy"></div>
+    <div class="geo-grid-item" data-gallery="geo" data-idx="10"><img src="assets/slides/georgina/C_Ronaldo_y_Georgina.jpg" alt="Georgina" loading="lazy"></div>
+    <div class="geo-grid-item" data-gallery="geo" data-idx="11"><img src="assets/slides/georgina/Cristiano_Ronaldo___Georgina_Rodriguez.jpg" alt="Georgina" loading="lazy"></div>
+    <div class="geo-grid-item" data-gallery="geo" data-idx="12"><img src="assets/slides/georgina/Georgina_Rodriguez.jpg" alt="Georgina" loading="lazy"></div>
+    <div class="geo-grid-item" data-gallery="geo" data-idx="13"><img src="assets/slides/georgina/georgina_rodriguez__1_.jpg" alt="Georgina" loading="lazy"></div>
+    <div class="geo-grid-item" data-gallery="geo" data-idx="14"><img src="assets/slides/georgina/Cristiano_Ronaldo_Al_Nassr_Journey_2025__.jpg" alt="Georgina" loading="lazy"></div>
+    <div class="geo-grid-item" data-gallery="geo" data-idx="15"><img src="assets/slides/georgina/The_best_of_the_best_celebrating_.jpg" alt="Georgina" loading="lazy"></div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- CONTACT -->
+<section id="contact" class="reveal">
+  <div class="contact-inner">
+    <p class="section-label">Get in Touch</p>
+    <h2 class="section-title">Contact <span class="gold">Us</span></h2>
+    <p style="color:var(--grey);font-size:1rem;">Reach out through any of the channels below</p>
+    <div class="contact-cards">
+      <a href="mailto:musharibramzan950@gmail.com" class="contact-card"><div class="c-icon">✉️</div><div class="c-name">Gmail</div><div class="c-val">musharibramzan950@gmail.com</div></a>
+      <a href="https://www.linkedin.com/in/musharib-ramzan-6609a739b" target="_blank" class="contact-card"><div class="c-icon">💼</div><div class="c-name">LinkedIn</div><div class="c-val">Musharib Ramzan</div></a>
+      <a href="https://linktr.ee/Musharib_" target="_blank" class="contact-card"><div class="c-icon">🌿</div><div class="c-name">Linktree</div><div class="c-val">linktr.ee/Musharib_</div></a>
+      <a href="https://github.com/musharibramzan950-bit" target="_blank" class="contact-card"><div class="c-icon">🐙</div><div class="c-name">GitHub</div><div class="c-val">musharibramzan950-bit</div></a>
+    </div>
+  </div>
+</section>
+
+<footer id="footer">
+  <div style="font-family:'Bebas Neue',sans-serif;font-size:2rem;color:var(--gold);letter-spacing:5px;margin-bottom:14px;">CR<span style="color:#fff">7</span></div>
+  <p>CRISTIANO RONALDO · THE GREATEST OF ALL TIME · SIUUUU 🐐</p>
+  <p style="margin-top:10px;font-size:.5rem;opacity:.6;">Made by <a href="https://github.com/musharibramzan950-bit" target="_blank" style="color:var(--gold);text-decoration:none;display:inline-flex;align-items:center;gap:5px;transition:opacity .2s;" onmouseover="this.style.opacity='.7'" onmouseout="this.style.opacity='1'"><svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg> Musharib Ramzan</a> · 2026</p>
+</footer>
+
+<!-- LIGHTBOX -->
+<div class="lightbox" id="lightbox">
+  <button class="lightbox-close" onclick="closeLightbox()">✕</button>
+  <button class="lightbox-prev" id="lbPrev">‹</button>
+  <div class="lightbox-img-wrap">
+    <img id="lightboxImg" src="" alt="">
+  </div>
+  <button class="lightbox-next" id="lbNext">›</button>
+  <div class="lightbox-counter" id="lbCounter"></div>
+</div>
+
+<script>
+// ===== CURSOR =====
+const cur=document.getElementById('cur'),ring=document.getElementById('ring');
+document.addEventListener('mousemove',e=>{
+  cur.style.left=e.clientX+'px';cur.style.top=e.clientY+'px';
+  setTimeout(()=>{ring.style.left=e.clientX+'px';ring.style.top=e.clientY+'px';},80);
+});
+document.addEventListener('mousedown',()=>{cur.style.width='18px';cur.style.height='18px';});
+document.addEventListener('mouseup',()=>{cur.style.width='10px';cur.style.height='10px';});
+
+// ===== PARTICLES =====
+const pc=document.getElementById('particles');
+for(let i=0;i<60;i++){
+  const p=document.createElement('div');p.className='particle';
+  p.style.cssText=`left:${Math.random()*100}%;--dx:${(Math.random()-0.5)*300}px;animation-delay:${Math.random()*10}s;animation-duration:${7+Math.random()*9}s;`;
+  pc.appendChild(p);
+}
+
+// ===== NAV MENU =====
+const dotsBtn=document.getElementById('dotsBtn'),panel=document.getElementById('menuPanel'),closeMenuBtn=document.getElementById('closeMenu');
+dotsBtn.addEventListener('click',()=>{panel.classList.add('open');dotsBtn.classList.add('active');});
+closeMenuBtn.addEventListener('click',closePanel);
+function closePanel(){panel.classList.remove('open');dotsBtn.classList.remove('active');}
+
+// ===== SCROLL PROGRESS =====
+window.addEventListener('scroll',()=>{
+  const s=window.scrollY,h=document.body.scrollHeight-window.innerHeight;
+  document.getElementById('progress').style.width=(s/h*100)+'%';
+},{passive:true});
+
+// ===== REVEAL ON SCROLL =====
+const observer=new IntersectionObserver(entries=>entries.forEach(e=>{
+  if(e.isIntersecting)e.target.classList.add('visible');
+}),{threshold:.08});
+document.querySelectorAll('.reveal').forEach(el=>observer.observe(el));
+
+// =====================================================
+// FIXED: Video autopause — when one plays, ALL others
+// pause immediately (no conditional check needed).
+// currentTime reset so they replay cleanly.
+// =====================================================
+const allVideos=document.querySelectorAll('.main-video');
+allVideos.forEach(v=>{
+  v.addEventListener('play',()=>{
+    allVideos.forEach(ov=>{
+      if(ov!==v){
+        ov.pause();
+        ov.currentTime=0;
+      }
+    });
+  });
+});
+
+// ===== LIGHTBOX SYSTEM =====
+const lb=document.getElementById('lightbox');
+const lbImg=document.getElementById('lightboxImg');
+const lbCounter=document.getElementById('lbCounter');
+
+// Build gallery registry
+const galleries={};
+
+// Register gallery slides
+document.querySelectorAll('[data-gallery]').forEach(el=>{
+  const gid=el.getAttribute('data-gallery');
+  const idx=parseInt(el.getAttribute('data-idx'));
+  if(!galleries[gid])galleries[gid]=[];
+  const img=el.querySelector('img');
+  if(img&&!galleries[gid][idx]){
+    galleries[gid][idx]=img.src;
+  }
+  el.addEventListener('click',()=>{
+    const imgs=galleries[gid].filter(Boolean);
+    openGallery(imgs,idx);
+  });
+});
+
+let currentImgs=[],currentIdx=0;
+
+function openGallery(imgs,idx){
+  currentImgs=imgs;
+  currentIdx=Math.min(idx,imgs.length-1);
+  showLbImg();
+  lb.classList.add('active');
+  document.body.style.overflow='hidden';
+}
+
+function openSingle(src){
+  currentImgs=[src];
+  currentIdx=0;
+  showLbImg();
+  lb.classList.add('active');
+  document.body.style.overflow='hidden';
+}
+
+function showLbImg(){
+  lbImg.style.opacity='0';
+  lbImg.style.transform='scale(.95)';
+  setTimeout(()=>{
+    lbImg.src=currentImgs[currentIdx];
+    lbImg.style.transition='opacity .25s,transform .25s';
+    lbImg.style.opacity='1';
+    lbImg.style.transform='scale(1)';
+  },100);
+  lbCounter.textContent=(currentIdx+1)+' / '+currentImgs.length;
+}
+
+function closeLightbox(){
+  lb.classList.remove('active');
+  document.body.style.overflow='';
+  lbImg.src='';
+}
+
+document.getElementById('lbPrev').addEventListener('click',e=>{
+  e.stopPropagation();
+  currentIdx=(currentIdx-1+currentImgs.length)%currentImgs.length;
+  showLbImg();
+});
+document.getElementById('lbNext').addEventListener('click',e=>{
+  e.stopPropagation();
+  currentIdx=(currentIdx+1)%currentImgs.length;
+  showLbImg();
+});
+
+lb.addEventListener('click',e=>{if(e.target===lb)closeLightbox();});
+
+document.addEventListener('keydown',e=>{
+  if(!lb.classList.contains('active'))return;
+  if(e.key==='Escape')closeLightbox();
+  if(e.key==='ArrowRight'){currentIdx=(currentIdx+1)%currentImgs.length;showLbImg();}
+  if(e.key==='ArrowLeft'){currentIdx=(currentIdx-1+currentImgs.length)%currentImgs.length;showLbImg();}
+});
+
+// Touch swipe on lightbox
+let lbTouchX=0;
+lb.addEventListener('touchstart',e=>{lbTouchX=e.touches[0].clientX;},{passive:true});
+lb.addEventListener('touchend',e=>{
+  const dx=e.changedTouches[0].clientX-lbTouchX;
+  if(Math.abs(dx)>50){
+    if(dx<0){currentIdx=(currentIdx+1)%currentImgs.length;}
+    else{currentIdx=(currentIdx-1+currentImgs.length)%currentImgs.length;}
+    showLbImg();
+  }
+},{passive:true});
+</script>
+</body>
+</html>
